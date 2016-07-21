@@ -1,0 +1,44 @@
+CREATE DATABASE bamazon;   
+CREATE SCHEMA bamazon;
+
+SHOW DATABASES;    
+SHOW DATABASES LIKE 'bamazon';
+SHOW SCHEMAS;
+
+USE bamazon;
+
+
+CREATE TABLE Products
+(
+ItemID                    int(5)  AUTO_INCREMENT, 
+ProductName       varchar(50),
+DepartmentName varchar(20),
+Price                      decimal(9,2),
+StockQuantity        int(7),
+PRIMARY KEY (ItemID)
+);
+
+SHOW TABLES;
+
+show columns from products;
+
+DROP TABLES products;
+
+
+
+INSERT INTO Products 
+(ItemID  , ProductName, DepartmentName, Price, StockQuantity ) 
+VALUES 
+(1,'prod1', 'dept01', 3.98, 201);
+
+INSERT INTO Products 
+(ProductName, DepartmentName, Price, StockQuantity ) 
+VALUES 
+('prod1', 'dept01', 3.92, 202);
+
+
+select * from Products;
+select flda, fldb, fldc from Products;
+
+
+delete from products;     deletes all rows
