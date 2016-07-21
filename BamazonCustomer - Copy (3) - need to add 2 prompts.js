@@ -4,8 +4,7 @@
 var inquirer  = require('inquirer');    // prompt processing api
 var mysql     = require('mysql');			 // MYSQL
 
-//var clrScreen = true;
-var clrScreen = false;
+var clrScreen = true;
 
 // MANAGER VIEW - heading - display ALL PRODUCT table fields
 var prodHdrView01  = "\t  " + "Item\tProduct\t\tDepartment\tPrice" +  "\t     " + "Qty In";
@@ -17,17 +16,20 @@ var prodHdrView04  = "\t\t  " + "Item\tProduct\t\tPrice" +  "\t     " + "Qty In"
 var prodHdrView05  = "\t\t  " + "ID\tName" + "\t\t" +  "  $"  +  "\t     " + "Stock";
 var prodHdrView06  = "\t  " + "---------------------------------------------------------";
 
+//connectDB();
+// connect to the mysql db
+var connection = mysql.createConnection({
+   	host: "localhost",
+   	port: 3306,
+   	user: "root", //Your username//
+   	password: "tom", //Your password//
+   	database: "Bamazon"
+})
 
 
-var connection = createConnection();
-console.log("connection=" + connection);
 connectProductsCustView();
+connectProductsManView();
 
-
-
-//connectProductsManView();
-
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
 function connectProductsCustView() {
 		//CREATES THE CONNECTION WITH THE SERVER AND MAKES THE TABLE UPON SUCCESSFUL CONNECTION//
@@ -37,15 +39,9 @@ function connectProductsCustView() {
     		}
 
     selectProductsCust();
-    //console.log('connection.host2=' + connection.host);
-
-
-
-    //connection.end();
+    connection.end();
 		})
 }
-
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
 function connectProductsManView() {
 		//CREATES THE CONNECTION WITH THE SERVER AND MAKES THE TABLE UPON SUCCESSFUL CONNECTION//
@@ -55,27 +51,12 @@ function connectProductsManView() {
     		}
 
     selectProductsMan();
-
-     connection.end();
+    connection.end();
 		})
 }
 
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
-function createConnection() {
-// create connection  to the mysql Bamazon db
-var createConnectionFuncVar = mysql.createConnection({
-   	host: "localhost",
-   	port: 3306,
-   	user: "root", //Your username//
-   	password: "tom", //Your password//
-   	database: "Bamazon"
-})
-    console.log('connection.host1 =' + createConnectionFuncVar.host);
-    return createConnectionFuncVar;
-}
 
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
 
 //FUNCTION CONTAINING ALL CUSTOMER PROMPTS//
@@ -120,6 +101,9 @@ function clearTheScreen() {
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
+function connectDB() {
+
+}
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
@@ -150,29 +134,22 @@ function selectProductsCust() {
     connection.query('SELECT ItemID, ProductName, Price, StockQuantity FROM products', function(err, res) {
         if (err) throw err;
 
-        displayHdr();									 // overall page heading
+        displayHdr();
 
         //PRINTS THE TABLE TO THE CONSOLE WITH MINIMAL STYLING//
+
+
         // CUSTOMER VIEW - start - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
         console.log("\n"); 
-        console.log(prodHdrView04);    // product subheading 1  
-        console.log(prodHdrView05);    // product subheading 2
-        console.log(prodHdrView06);    // underline 
-
-        console.log("res.length=" + res.length); 
-
-        // display the products
-                //FOR LOOP GOES THROUGH THE MYSQL TABLE AND PRINTS EACH INDIVIDUAL ROW ON A NEW LINE//
+        console.log(prodHdrView04);
+        console.log(prodHdrView05);
+        console.log(prodHdrView06);       
+        //FOR LOOP GOES THROUGH THE MYSQL TABLE AND PRINTS EACH INDIVIDUAL ROW ON A NEW LINE//
         for (var i = 0; i < res.length; i++) {
             console.log("\t\t   " + res[i].ItemID + "\t"  + res[i].ProductName  + 
             					   "\t\t" + res[i].Price + "\t     " + res[i].StockQuantity);
         }
-
-        console.log(prodHdrView06);    // underline 
-
-        console.log("promptCustomer-before");
-    //promptCustomer();
-    console.log("promptCustomer-after");
+        console.log(prodHdrView06);  
         // CUSTOMER VIEW - end - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
 
