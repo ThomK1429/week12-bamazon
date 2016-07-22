@@ -5,7 +5,7 @@ var inquirer  = require('inquirer');    // prompt processing api
 var mysql     = require('mysql');			 // MYSQL
 
 //var clrScreen = true;
-var clrScreen = true;
+var clrScreen = false;
 
 // MANAGER VIEW - heading - display ALL PRODUCT table fields
 var prodHdrView01  = "\t  " + "Item\tProduct\t\tDepartment\tPrice" +  "\t     " + "Qty In";
@@ -20,16 +20,8 @@ var prodHdrView06  = "\t  " + "-------------------------------------------------
 
 
 var connection = createConnection();
-
-displayHdr();
 console.log("connection=" + connection);
-//connectProductsCustView(connection);
-
-	connectProductsCustView(connection);
-
-//console.log("promptCustomer-before");
-  promptCustomer(connection);
-//console.log("promptCustomer-after");
+connectProductsCustView();
 
 
 
@@ -37,15 +29,17 @@ console.log("connection=" + connection);
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
-function connectProductsCustView(connectionF) {
+function connectProductsCustView() {
 		//CREATES THE CONNECTION WITH THE SERVER AND MAKES THE TABLE UPON SUCCESSFUL CONNECTION//
-		connectionF.connect(function(err) {
+		connection.connect(function(err) {
     		if (err) {
        		 console.error("error connecting: " + err.stack);
     		}
 
-    selectProductsCust(connectionF);
+    selectProductsCust();
     //console.log('connection.host2=' + connection.host);
+
+
 
     //connection.end();
 		})
@@ -85,46 +79,32 @@ var createConnectionFuncVar = mysql.createConnection({
 
 
 //FUNCTION CONTAINING ALL CUSTOMER PROMPTS//
-function promptCustomer(connectionF) {
+var promptCustomer = function(res) {
 
-
-//	var promptCustomer = function(connectionF) {
-
-	//connectProductsCustView(connectionF);
-
-	//console.log("res=" + res[0].ItemID)  + " " + res[0].ProductName;
+	console.log("res=" + res[0].ItemID)  + " " + res[0].ProductName;
         //PROMPTS USER FOR WHAT THEY WOULD LIKE TO PURCHASE//
-        inquirer.prompt([
-          {
+        inquirer.prompt([{
             type: 'input',
-            name: 'itemNum',
-            message: 'Enter the product item # to select? : '
-          }, {
-          	 type: 'input',
-          	 name: 'itemQty',
-          	 message: 'Enter the quantity you wish to pruchase? : '
-          }
-
-					]).then(function(val) {
-					//connectProductsCustView(connectionF);
-        	console.log("val.itemNum=" + val.itemNum);
-        	console.log("val.itemQty=" + val.itemQty);
+            name: 'choice',
+            message: 'What would you like to purchase?'
+        }]).then(function(val) {
+        	console.log("val.choice=" + val.choice);
 
 
                 //SET THE VAR correct TO FALSE SO AS TO MAKE SURE THE USER INPUTS A VALID PRODUCT NAME//
                 var correct = false;
                 //LOOPS THROUGH THE MYSQL TABLE TO CHECK THAT THE PRODUCT THEY WANTED EXISTS//
-           //     for (var i = 0; i < res.length; i++) {                    	
+                for (var i = 0; i < res.length; i++) {                    	
 	                //1. TODO: IF THE PRODUCT EXISTS, SET correct = true and ASK THE USER TO SEE HOW MANY OF THE PRODUCT THEY WOULD LIKE TO BUY//
 	               	//2. TODO: CHECK TO SEE IF THE AMOUNT REQUESTED IS LESS THAN THE AMOUNT THAT IS AVAILABLE//                       
 	                //3. TODO: UPDATE THE MYSQL TO REDUCE THE StockQuanaity by the THE AMOUNT REQUESTED  - UPDATE COMMAND!
 	                //4. TODO: SHOW THE TABLE again by calling the function that makes the table
-            //    }
+                }
 
                 //IF THE PRODUCT REQUESTED DOES NOT EXIST, RESTARTS PROMPT//
-           //     if (i == res.length && correct == false) {
-                   promptCustomer();
-             //   }
+                if (i == res.length && correct == false) {
+                    promptCustomer(res);
+                }
             });
 }
 
@@ -165,12 +145,12 @@ function displayHdr( ) {
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
 //FUNCTION TO GRAB THE PRODUCTS TABLE FROM THE DATABASE AND PRINT RESULTS TO CONSOLE//
-function selectProductsCust(connectionF) {
+function selectProductsCust() {
     //SELECTS ALL OF THE DATA FROM THE MYSQL PRODUCTS TABLE - SELECT COMMAND!
-    connectionF.query('SELECT ItemID, ProductName, Price, StockQuantity FROM products', function(err, res) {
+    connection.query('SELECT ItemID, ProductName, Price, StockQuantity FROM products', function(err, res) {
         if (err) throw err;
 
-        //displayHdr();									 // overall page heading
+        displayHdr();									 // overall page heading
 
         //PRINTS THE TABLE TO THE CONSOLE WITH MINIMAL STYLING//
         // CUSTOMER VIEW - start - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
@@ -190,14 +170,16 @@ function selectProductsCust(connectionF) {
 
         console.log(prodHdrView06);    // underline 
 
-
-
-        //console.log("promptCustomer-before");
+        console.log("promptCustomer-before");
     //promptCustomer();
-    //console.log("promptCustomer-after");
+    console.log("promptCustomer-after");
         // CUSTOMER VIEW - end - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
-        
+
+
+
+        //RUNS THE CUSTOMER'S PROMPTS AFTER CREATING THE TABLE. SENDS res SO THE promptCustomer FUNCTION IS ABLE TO SEARCH THROUGH THE DATA//
+        //promptCustomer(res);
     });
 };  
 
