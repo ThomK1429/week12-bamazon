@@ -34,7 +34,16 @@ VALUES
 INSERT INTO Products 
 (ProductName, DepartmentName, Price, StockQuantity ) 
 VALUES 
-('prod1', 'dept01', 3.92, 202);
+('butterfat', 'bakery', 2.03, 0);
+
+INSERT INTO Products 
+(ProductName, DepartmentName, Price, StockQuantity ) 
+VALUES 
+('Mobil 1', 'dept01', 3.90, 0000200),
+('Mobil 2', 'dept01', 3.91, 0000201),
+('Penzoil', 'dept01', 3.92, 0000202);
+(Butterfat
+
 
 
 select * from Products;
