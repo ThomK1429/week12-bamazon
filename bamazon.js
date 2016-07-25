@@ -74,12 +74,12 @@ var promptCustomer = function(res) {
 	                //1. TODO: IF THE PRODUCT EXISTS, SET correct = true and ASK THE USER TO SEE HOW MANY OF THE PRODUCT THEY WOULD LIKE TO BUY//
 	               	if (res[i].ItemID == parseInt(val.choice)) {
                         correct = true;         // item found
-                        console.log("\n    #1. Item Id '" + res[i].ItemID + "' - " + res[i].ProductName + " found.\n");
+                        console.log("\n        Item Id '" + res[i].ItemID + "' - " + res[i].ProductName + " found.\n");
                     } 
 
                     //2. TODO: CHECK TO SEE IF THE AMOUNT REQUESTED IS LESS THAN THE AMOUNT THAT IS AVAILABLE//                       
 	                 if (correct == true && res[i].StockQuantity <= 0) {
-                         console.log("\n    #2. Item #" + res[i].ItemID + " - " + res[i].ProductName + 
+                         console.log("\n        Item #" + res[i].ItemID + " - " + res[i].ProductName + 
                             " - quantity " + val.qty + " is temporarily out of stock.\n" );
                         correct = false;
                         promptCustomer(res);
@@ -88,15 +88,22 @@ var promptCustomer = function(res) {
 
                     //3. TODO: UPDATE THE MYSQL TO REDUCE THE StockQuanaity by the THE AMOUNT REQUESTED  - UPDATE COMMAND!
 	                if (correct == true && res[i].StockQuantity >= 0) {
-                        console.log("\n   #3 Item #" + res[i].ItemID + " - " + res[i].ProductName 
-                            + " - quantity " + val.qty + " has been ordered." + "\n");
-
-                        //console.log("\n   #3 Item #" + res[0].ItemID + " - " + res[0].ProductName + " quantity updated.\n");
-                        perfUpdate(res, i, val.qty);
-                        var newQty = res[i].StockQuantity - val.qty;
-                        //    newQty = res[i].StockQuantity;
                         
+                        perfUpdate(res, i, val.qty);
+                        //console.log("\n   #3 Item #" + res[0].ItemID + " - " + res[0].ProductName + " quantity updated.\n");
+                        //var newQty = res[i].StockQuantity - val.qty;
+                        //    newQty = res[i].StockQuantity;
+
+
+                        clearTheScreen();
+                        displayHdr();                  
                         makeTable(); 
+                        
+                        console.log("\n          Item #" + res[i].ItemID + " - " + res[i].ProductName 
+                            + " - qty " + val.qty + " * $" + res[i].Price +  " = " 
+                            + (val.qty * res[i].Price) + " has been ordered." + "\n");
+
+                        //makeTable(); 
                         break;
                     }
 
@@ -107,7 +114,7 @@ var promptCustomer = function(res) {
                     //IF THE PRODUCT REQUESTED DOES NOT EXIST, RESTARTS PROMPT//
                     //console.log("i=" + i + "  correct=" + correct + " res.length=" + res.length)
                     if (i == res.length - 1 && correct == false) {
-                        console.log("\n   #4 Item Id '" + val.choice + "' requested does not exist.  Please try again.\n");
+                        console.log("\n      Item Id '" + val.choice + "' requested does not exist.  Please try again.\n");
                         promptCustomer(res);
                     }
 
@@ -136,7 +143,7 @@ function displayHdr( ) {
 
     //console.log("\n"); 
     //console.log("Bamazon - BamazonCustomer.js" + hintWord);
-    console.log("Bamazon - BamazonCustomer.js");
+    console.log("Bamazon - bamazon.js");
 
     console.log("\n"); 
     console.log("          *********************************************************");
