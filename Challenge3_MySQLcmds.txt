@@ -1,0 +1,27 @@
+SHOW DATABASES LIKE 'bamazon';
+
+USE bamazon;
+
+DROP TABLES Departments;
+
+CREATE TABLE Departments
+(
+DepartmentID                    int(5)  AUTO_INCREMENT, 
+DepartmentName            varchar(50),
+OverHeadCost                 decimal(9,2),
+TotalSales                        decimal(9,2),
+PRIMARY KEY (DepartmentID)
+);
+
+SHOW COLUMNS from Departments;
+
+INSERT INTO Departments
+(DepartmentID, DepartmentName, OverHeadCost, TotalSales)
+VALUES
+(10, 'Grocery', 1000.98, 0.0),
+(20, 'Hardware', 500.97, 0.0),
+(30, 'Bakery', 300.96, 0.0),
+(40, 'Deli', 700, 0.0);
+
+
+

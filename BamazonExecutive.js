@@ -2,14 +2,10 @@
 // Tom Keel - due 7/24/2016
 //
 // NPM, MySQL, Javascript
-// Challenge #1 - Customer View 
+// Challenge #3 - Executive View 
 //
-//
-
-
-
-
-
+//  Clone of BamazonCustomer.js
+//  Modifications in process to link/integrate processing to the Department table. 
 
 //INITIALIZES THE NPM PACKAGES USED//
 var mysql    = require('mysql');

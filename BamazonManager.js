@@ -1,3 +1,12 @@
+// Week of 12 HW: Node.js & MySQL
+// Tom Keel - due 7/24/2016
+//
+// NPM, MySQL, Javascript
+// Challenge #2 - Manager View 
+//
+//
+
+
 //INITIALIZES THE NPM PACKAGES USED//
 var mysql    = require('mysql');
 var inquirer = require('inquirer');
