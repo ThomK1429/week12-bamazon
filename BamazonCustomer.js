@@ -5,7 +5,7 @@ require('console.table');
 
 var clrScreen = true;
 
-var msg1Prompt = ' Enter the Item Id to order? ==> ';
+var msg1Prompt = "Enter the Item Id to order (or 'e' to exit) ==> ";
 var msg2Prompt = 'Enter next Item Id to order? ==> ';
 var msgPrompt  =  msg1Prompt;    // default
 
@@ -58,7 +58,7 @@ var promptCustomer = function(res) {
             {
             type: 'input',       
             name: 'qty',
-            message: '             order quantity? ==> '    
+            message: '                            order quantity? ==> '    
         }]).then(function(val) {
 
                 //SET THE VAR correct TO FALSE SO AS TO MAKE SURE THE USER INPUTS A VALID PRODUCT NAME//
@@ -101,7 +101,7 @@ var promptCustomer = function(res) {
                         
                         console.log("\n          Item #" + res[i].ItemID + " - " + res[i].ProductName 
                             + " - qty " + val.qty + " * $" + res[i].Price +  " = " 
-                            + (val.qty * res[i].Price) + " has been ordered." + "\n");
+                            + "$" + (val.qty * res[i].Price) + " has been ordered." + "\n");
 
                         //makeTable(); 
                         break;
@@ -142,9 +142,8 @@ function displayHdr( ) {
     clearTheScreen();       // make app look less like command line interaction
 
     //console.log("\n"); 
-    //console.log("Bamazon - BamazonCustomer.js" + hintWord);
-    console.log("Bamazon - bamazon.js");
-
+    console.log("Bamazon - BamazonCustomer.js");
+ 
     console.log("\n"); 
     console.log("          *********************************************************");
     console.log("          *                                                       *");
