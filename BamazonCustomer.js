@@ -78,7 +78,7 @@ var promptCustomer = function(res) {
                     } 
 
                     //2. TODO: CHECK TO SEE IF THE AMOUNT REQUESTED IS LESS THAN THE AMOUNT THAT IS AVAILABLE//                       
-	                 if (correct == true && res[i].StockQuantity <= 0) {
+	                 if (correct == true && (res[i].StockQuantity -val.qty) <  0) {
                          console.log("\n        Item #" + res[i].ItemID + " - " + res[i].ProductName + 
                             " - quantity " + val.qty + " is temporarily out of stock.\n" );
                         correct = false;
