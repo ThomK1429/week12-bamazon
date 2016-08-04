@@ -58,20 +58,28 @@ connection.connect(function(err) {
           
         }]).then(function(val) {
 
-        	switch(parseInt(val.choice)) {
-    				case 1:
+        	//switch(parseInt(val.choice)) {
+          switch((val.choice)) {
+    				case "1":
         			option01();		// View products for sale
         			break;
-    				case 2:
+    				case "2":
         			option02();		// Display products w/ inventory less than 5 items
         			break;
-        		case 3:
+        		case "3":
         			option03();		// Update product inventory amount
         			break
-        		case 4:
+        		case "4":
         			option04();		// Add a new product
         			break;        		
-            case 5:
+            case "5":
+            case "e":
+            case "exit":
+            case "q":
+            case "quit":
+            case "end":
+            case "finish":
+            case "go west":
             	option05();		// end the program - return to the os
         			break;
      				default:

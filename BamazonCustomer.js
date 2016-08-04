@@ -4,7 +4,7 @@
 // NPM, MySQL, Javascript
 // Challenge #1 - Customer View 
 //
-//
+// 2016 0803 - update code to separate Prompt into solicit item #, then qty
 
 
 
@@ -67,11 +67,7 @@ var promptCustomer = function(res) {
          inquirer.prompt([{
             type: 'input',
             name: 'choice',
-            message: msgPrompt},
-            {
-            type: 'input',       
-            name: 'qty',
-            message: '                            order quantity? ==> '    
+            message: msgPrompt            
         }]).then(function(val) {
 
                 //SET THE VAR correct TO FALSE SO AS TO MAKE SURE THE USER INPUTS A VALID PRODUCT NAME//
@@ -88,37 +84,12 @@ var promptCustomer = function(res) {
 	               	if (res[i].ItemID == parseInt(val.choice)) {
                         correct = true;         // item found
                         console.log("\n        Item Id '" + res[i].ItemID + "' - " + res[i].ProductName + " found.\n");
+                   			
+                   			//console.log("Found");
+                            // pass the array of items called res, and the found index # i
+							promptCustomer2(res, i); // item was found, now prompt for qty
+                   			break;
                     } 
-
-                    //2. TODO: CHECK TO SEE IF THE AMOUNT REQUESTED IS LESS THAN THE AMOUNT THAT IS AVAILABLE//                       
-	                 if (correct == true && (res[i].StockQuantity -val.qty) <  0) {
-                         console.log("\n        Item #" + res[i].ItemID + " - " + res[i].ProductName + 
-                            " - quantity " + val.qty + " is temporarily out of stock.\n" );
-                        correct = false;
-                        promptCustomer(res);
-                        break;
-                     }
-
-                    //3. TODO: UPDATE THE MYSQL TO REDUCE THE StockQuanaity by the THE AMOUNT REQUESTED  - UPDATE COMMAND!
-	                if (correct == true && res[i].StockQuantity >= 0) {
-                        
-                        perfUpdate(res, i, val.qty);
-                        //console.log("\n   #3 Item #" + res[0].ItemID + " - " + res[0].ProductName + " quantity updated.\n");
-                        //var newQty = res[i].StockQuantity - val.qty;
-                        //    newQty = res[i].StockQuantity;
-
-
-                        clearTheScreen();
-                        displayHdr();                  
-                        makeTable(); 
-                        
-                        console.log("\n          Item #" + res[i].ItemID + " - " + res[i].ProductName 
-                            + " - qty " + val.qty + " * $" + res[i].Price +  " = " 
-                            + "$" + (val.qty * res[i].Price) + " has been ordered." + "\n");
-
-                        //makeTable(); 
-                        break;
-                    }
 
 
                     //4. TODO: SHOW THE TABLE again by calling the function that makes the table
@@ -132,7 +103,6 @@ var promptCustomer = function(res) {
                     }
 
 
-                
                 }  //  end of for loop
 
                 correct = false;
@@ -141,6 +111,70 @@ var promptCustomer = function(res) {
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+
+var promptCustomer2 = function(res, i) {
+        //PROMPTS USER FOR QTY # THAT THEY WOULD LIKE TO PURCHASE//
+         inquirer.prompt([{
+            type: 'input',       
+            name: 'qty',
+            message: '                            order quantity? ==> '    
+        }]).then(function(val) {
+                var correct = true;
+
+                if(val.qty == "e" || val.qty == "exit"){
+                    process.exit();
+                    correct = false;
+                } 
+                 
+                // if qty 0, go back and request the item number
+                if (val.qty == 0) {
+                   console.log("\n");
+                   promptCustomer(res);
+                   correct = false;
+                }
+                // if qty ENTER key or negative, display error msg,  go back & request item number
+                if (val.qty == ""  ||  val.qty < 0 ) {
+                    console.log("\n Error: ==>" + val.qty + "<== is an invalid quantity. \n");
+                   promptCustomer(res);
+                   correct = false;
+                }
+
+
+
+                
+                //2. TODO: CHECK TO SEE IF THE AMOUNT REQUESTED IS LESS THAN THE AMOUNT THAT IS AVAILABLE//                       
+	                 if (correct == true && (res[i].StockQuantity - val.qty) <  0) {
+                         console.log("\n        Item #" + res[i].ItemID + " - " + res[i].ProductName + 
+                            " - quantity " + val.qty + " is temporarily out of stock.\n" );
+                        promptCustomer(res);
+                        correct = false;
+                     }
+
+                    //3. TODO: UPDATE THE MYSQL TO REDUCE THE StockQuanaity by the THE AMOUNT REQUESTED  - UPDATE COMMAND!
+	                if (correct == true && res[i].StockQuantity >= 0) {
+                        
+                        perfUpdate(res, i, val.qty);
+                        //console.log("\n   #3 Item #" + res[0].ItemID + " - " + res[0].ProductName + " quantity updated.\n");
+                        //var newQty = res[i].StockQuantity - val.qty;
+                        //    newQty = res[i].StockQuantity;
+
+                        clearTheScreen();
+                        displayHdr();                  
+                        makeTable(); 
+                        
+                        console.log("\n          Item #" + res[i].ItemID + " - " + res[i].ProductName 
+                            + " - qty " + val.qty + " * $" + res[i].Price +  " = " 
+                            + "$" + (val.qty * res[i].Price) + " has been ordered." + "\n");
+
+                    }
+                
+            });
+}
+
+
+
+
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 function clearTheScreen() { 
 // give the appearance of screen driven app rather than cmd line app
@@ -174,13 +208,14 @@ function displayHdr( ) {
 function printTbl(res) {
     //var tab = "\t";
     //PRINTS THE TABLE TO THE CONSOLE WITH MINIMAL STYLING//
-    //console.log("ItemID\tProduct Name\tDepartment Name\tPrice\t# In Stock");
-    //console.log("--------------------------------------------------------");
+    //console.log("\t  ItemID  Product Name \t  Dept. Name \tPrice \tQty");
+    //console.log("\t  ---------------------------------------------------------");
     //FOR LOOP GOES THROUGH THE MYSQL TABLE AND PRINTS EACH INDIVIDUAL ROW ON A NEW LINE//
     //for (var i = 0; i < res.length; i++) {
-    //    console.log(res[i].ItemID + tab + res[i].ProductName + tab + res[i].DepartmentName + tab + res[i].Price + tab + res[i].StockQuantity);
+    //   console.log("\t  " + res[i].ItemID + "\t  " + res[i].ProductName.trim() + "\t   " + 
+    //    res[i].DepartmentName.trim() + "\t " + res[i].Price + tab + res[i].StockQuantity);
     //}
-    //console.log("--------------------------------------------------------" );
+    //console.log("\t  ---------------------------------------------------------" );
 
     console.table(res);
 }
