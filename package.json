@@ -1,0 +1,25 @@
+{
+  "name": "week12-bamazon",
+  "version": "1.0.0",
+  "description": "Bamazon Store with Node and MySQL",
+  "main": "'",
+  "dependencies": {
+    "console.table": "^0.7.0",
+    "inquirer": "^1.1.3",
+    "mysql": "^2.11.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ThomK1429/week12-bamazon.git"
+  },
+  "author": "Tom Keel",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ThomK1429/week12-bamazon/issues"
+  },
+  "homepage": "https://github.com/ThomK1429/week12-bamazon#readme"
+}

@@ -77,34 +77,43 @@ var promptCustomer = function(res) {
                     process.exit();
                 } 
 
-                //LOOPS THROUGH THE MYSQL TABLE TO CHECK THAT THE PRODUCT THEY WANTED EXISTS//
-                for (var i = 0; i < res.length; i++) {  
-                    correct = false;             	
-	                //1. TODO: IF THE PRODUCT EXISTS, SET correct = true and ASK THE USER TO SEE HOW MANY OF THE PRODUCT THEY WOULD LIKE TO BUY//
-	               	if (res[i].ItemID == parseInt(val.choice)) {
-                        correct = true;         // item found
-                        console.log("\n        Item Id '" + res[i].ItemID + "' - " + res[i].ProductName + " found.\n");
-                   			
-                   			//console.log("Found");
-                            // pass the array of items called res, and the found index # i
-							promptCustomer2(res, i); // item was found, now prompt for qty
-                   			break;
-                    } 
+
+                if(val.choice=="" ){
+                	  // no input via itemID, refresh the screen and start again
+                    clearTheScreen();
+    								displayHdr();
+    								makeTable();
+                  }  
+                 else {
+                 
+		                //LOOPS THROUGH THE MYSQL TABLE TO CHECK THAT THE PRODUCT THEY WANTED EXISTS//
+		                for (var i = 0; i < res.length; i++) {  
+		                    correct = false;             	
+			                //1. TODO: IF THE PRODUCT EXISTS, SET correct = true and ASK THE USER TO SEE HOW MANY OF THE PRODUCT THEY WOULD LIKE TO BUY//
+			               	if (res[i].ItemID == parseInt(val.choice)) {
+		                        correct = true;         // item found
+		                        console.log("\n        Item Id '" + res[i].ItemID + "' - " + res[i].ProductName + " found.\n");
+		                   			
+		                   			//console.log("Found");
+		                            // pass the array of items called res, and the found index # i
+														promptCustomer2(res, i); // item was found, now prompt for qty
+		                   			break;
+		                    } 
 
 
-                    //4. TODO: SHOW THE TABLE again by calling the function that makes the table
-                    // pgm will show table at end of loop
+		                    //4. TODO: SHOW THE TABLE again by calling the function that makes the table
+		                    // pgm will show table at end of loop
 
-                    //IF THE PRODUCT REQUESTED DOES NOT EXIST, RESTARTS PROMPT//
-                    //console.log("i=" + i + "  correct=" + correct + " res.length=" + res.length)
-                    if (i == res.length - 1 && correct == false) {
-                        console.log("\n      Item Id '" + val.choice + "' requested does not exist.  Please try again.\n");
-                        promptCustomer(res);
-                    }
+		                    //IF THE PRODUCT REQUESTED DOES NOT EXIST, RESTARTS PROMPT//
+		                    //console.log("i=" + i + "  correct=" + correct + " res.length=" + res.length)
+		                    if (i == res.length - 1 && correct == false) {
+		                        console.log("\n      Item Id '" + val.choice + "' requested does not exist.  Please try again.\n");
+		                        promptCustomer(res);
+		                    }
 
 
-                }  //  end of for loop
-
+		                }  //  end of for loop
+              }
                 correct = false;
 
             });
@@ -177,7 +186,7 @@ var promptCustomer2 = function(res, i) {
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 function clearTheScreen() { 
-// give the appearance of screen driven app rather than cmd line app
+//  give the appearance of screen driven app rather than cmd line app
     if (clrScreen) {
       process.stdout.write('\033c'); // clear the screen 
     }

@@ -224,7 +224,7 @@ function option04() {					// Add a new product
           {
           type: 'input',
           name: 'prodPrice',
-          message: "Enter product price n: "},  
+          message: "Enter product price : "},  
 
           {
           type: 'input',
@@ -233,15 +233,9 @@ function option04() {					// Add a new product
           
         }]).then(function(val) {
 
-        	var post  = {
-  						ProductName: val.prodName,
-  						DepartmentName: val.prodDept,
- 							Price: parseFloat(val.prodPrice),
- 							StockQuantity: parseInt(val.prodInvAmt)
-					};
+        	
 
-
-					console.log("val.prodPrice type=" + (typeof val.prodPrice) );
+					//console.log("val.prodPrice type=" + (typeof val.prodPrice) );
 					// validate the input amounts - start
 					if (val.prodPrice >= 0) { 
 					} else {
@@ -252,8 +246,16 @@ function option04() {					// Add a new product
 					if (val.prodInvAmt >= 0) {
 					} else {
 						console.log("The product inventory amt.  was INVALID. Its value was set to zero. ");
-							val.prodInvAmt = "0.0";
+							val.prodInvAmt = "0";
 					}
+
+          var post  = {
+              ProductName: val.prodName,
+              DepartmentName: val.prodDept,
+              Price: parseFloat(val.prodPrice),
+              StockQuantity: parseInt(val.prodInvAmt)
+          };
+
 				 
 					// validate the input amounts - end
 
